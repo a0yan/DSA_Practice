@@ -1,24 +1,45 @@
-class Solution {
+class Solution 
+{
 public:
-    int minDeletions(string s) {
-        vector<int>arr(26,0);
-        for(auto c:s){
-            arr[c-'a']++;
-        }
-        vector<int>res;
-        for(int i=0;i<26;i++){
-            if(arr[i]>0)res.push_back(arr[i]);
-        }
-        sort(res.begin(),res.end());
-        unordered_map<int,int>visited;
-        int cnt=0;
-        for(auto f:res){
-            while(visited[f]){
-                f--;
-                cnt++;
+    string removeKdigits(string num, int k)
+    {
+        if(num.length() == k)
+            return("0");
+        
+        stack<char> s;
+        
+        for(int i = 0;i<num.length();i++)
+        {
+            while(!s.empty() && s.top() > num[i] && k>0)
+            {
+                s.pop();
+                k-=1;
             }
-            if(f>0)visited[f]=1;
+            s.push(num[i]);
         }
-        return cnt;
+        
+        while(k>0)
+        {
+            s.pop();
+            k-=1;
+        }
+        
+        string ans="";
+        
+        while(!s.empty())
+        {
+            ans+=s.top();
+            s.pop();
+        }
+        int len=ans.size();
+        while(ans.size()>1&&ans[len-1]=='0')
+        {//remove leading zeros
+            ans.pop_back();
+            len--;
+    }
+        reverse(ans.begin(),ans.end());
+        return ans;
+ 
+        
     }
 };
