@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int findTheCity(int n, vector<vector<int>>& edges, int dt) {
+        int inf=1e5;
+        vector<vector<int>>grid(n,vector<int>(n,inf));
+        for(int i=0;i<edges.size();i++){
+            int u=edges[i][0];
+            int v=edges[i][1];
+            int w=edges[i][2];
+            grid[u][v]=w;
+            grid[v][u]=w;
+        }
+        for(int i=0;i<n;i++){
+            grid[i][i]=0;
+        }
+        for(int k=0;k<n;k++){
+            for(int u=0;u<n;u++){
+                for(int v=0;v<n;v++){
+                    // if(u!=v and u!=k and k!=v)
+                    grid[u][v]=min(grid[u][v],grid[u][k]+grid[k][v]);
+                }
+            }
+        }
+        int city_count=INT_MAX;
+        int curr_city=-1;
+        for(int i=0;i<n;i++){
+            int temp=0;
+            for(int j=0;j<n;j++){
+                // cout<<grid[i][j]<<" ";
+                if(grid[i][j]<=dt && i!=j){
+                    temp++;
+                }
+            }
+            if(temp<=city_count){
+                    curr_city=i;
+                    cout<<temp;
+                    city_count=temp;
+                }
+        }
+        return curr_city;
+    }
+};
